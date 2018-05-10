@@ -3,6 +3,9 @@ const appDiv = document.getElementsByClassName('app')[0];
 createTableIntoDiv(appDiv, 5, 5);
 
 function createTableIntoDiv(div, rows, cols) {
+    if (rows === 0 || cols === 0) {
+        return '';
+    }
     let table = document.createElement('table');
     let header = document.createElement('tr');
     let leftTopEmpty = document.createElement('th');

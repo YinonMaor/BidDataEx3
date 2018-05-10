@@ -16,24 +16,21 @@ function isValidPort(port) {
     return !_.includes(port, '.') && !isNaN(port) && port >= 1024 && port <= 65535;
 }
 
-
 let PORT    = 3300;
 let address = '127.0.0.1';
 
 if (_.includes(process.argv, '--help')) {
-    console.log('Usage: node CDN [options]\n');
+    console.log('Usage: node Server [options]\n');
     console.log('Options:');
-    console.log('  --port        Define CDN server\'s port argument (3300 by default)');
+    console.log('  --port        Define server\'s port argument (3300 by default)');
     process.exit(0);
 }
 
 process.argv.forEach((val, index, array) => {
     if (val === '--port' && array[index + 1]) {
-        if (!isValidPort(array[index + 1])) {
-            console.error('\x1b[31m', '--------ERROR!--------\nServer failed to load:\nInvalid given port.');
-            process.exit(1);
+        if (isValidPort(array[index + 1])) {
+            PORT = parseInt(array[index + 1])
         }
-        PORT = parseInt(array[index + 1]) || PORT;
     }
 });
 
