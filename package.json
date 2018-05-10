@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "./node_modules/.bin/eslint .",
-    "fix": "./node_modules/.bin/eslint . --fix"
+    "lint": "./node_modules/.bin/eslint Server/",
+    "fix": "./node_modules/.bin/eslint Server/ --fix"
   },
   "repository": {
     "type": "git",

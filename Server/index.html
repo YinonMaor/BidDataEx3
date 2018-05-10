@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <title>BigData - Yinon Maor</title>
     <style>
+        body {
+            background-color: #f2f2f2;
+        }
+
         .filter {
             margin-bottom: 30px;
         }
@@ -48,12 +52,46 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
+        input[type=submit]:active {
+            opacity: 0.7;
+        }
+
+        .app {
+            width: 100%;
+        }
+        .app table {
+            width: 100%;
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+        }
+
+        .app table th {
+            background-color: #e6e6e6;
+        }
+
+        .app table th, .app table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .app th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: #cccccc;
+        }
     </style>
 </head>
 <body>
+<div style="width: 100%;">
+    <p style="text-align: center;">
+        <span style="font-size: 24px;">Football</span>
+    </p>
+</div>
 <div class="filter">
     <p>
-        <span>Filter:</span>
+        <span style="font-size: 20px;">Filter By:</span>
     </p>
     <table id="tableFilter">
         <tr>
@@ -65,12 +103,12 @@
                 Age:
             </td>
             <td>
-                <input type="text" id="fname" name="age" placeholder="Age..">
+                <input type="text" id="fname" name="age" placeholder="Age.." onkeypress="return isNumberKey(event)" />
             </td>
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="Submit">
+                <input id="submit" type="submit" value="Submit" />
             </td>
         </tr>
     </table>
