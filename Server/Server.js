@@ -25,7 +25,7 @@ function getDataWithFilter(filter) {
                 if (err) {
                     throw err;
                 }
-                const newArray = _.filter(docs, player => {
+                let newArray = _.filter(docs, player => {
                     let flag = false;
                     _.each(filter, (value, key) => {
                         if (_.isNumber(value)) {
@@ -37,20 +37,15 @@ function getDataWithFilter(filter) {
                     });
                     return flag;
                 });
+                _.each(newArray, (value, key) => {
+                    newArray[key] = _.omit(newArray[key], ['_id', 'Unnamed: 0']);
+                });
                 client.close();
                 resolve(newArray);
             });
         });
     });
 }
-
-const promise = getDataWithFilter({Age: 26});
-promise.then(result => {
-    console.log(result);
-});
-
-/*
-
 
 let PORT    = 3300;
 let address = '127.0.0.1';
@@ -75,15 +70,31 @@ const server = http.createServer((req, res) => {
     if (fileName === '/' || fileName === '/index.html') {
         fileName = 'index.html';
     }
-    fs.readFile(path.join(__dirname, fileName), (err, data) => {
-        if (err) {
-            res.writeHead(400, {'Content-type':'text/html'});
-            res.end('A trouble occurred with the file.');
-        } else {
-            res.writeHead(200, {'Content-Type': 'text/html'});
-            res.end(data);
-        }
-    });
+    const promise = getDataWithFilter({Age: 26});
+    if (_.includes(fileName, 'data.json')) {
+        promise.then(result => {
+            fs.writeFileSync(path.join(__dirname, 'data.json'), JSON.stringify(result), 'utf-8');
+            fs.readFile(path.join(__dirname, fileName), (err, data) => {
+                if (err) {
+                    res.writeHead(400, {'Content-type':'application/json'});
+                    res.end('A trouble occurred with the file.');
+                } else {
+                    res.writeHead(200, {'Content-Type': 'application/json'});
+                    res.end(JSON.stringify(data));
+                }
+            });
+        });
+    } else {
+        fs.readFile(path.join(__dirname, fileName), (err, data) => {
+            if (err) {
+                res.writeHead(400, {'Content-type':'text/html'});
+                res.end('A trouble occurred with the file.');
+            } else {
+                res.writeHead(200, {'Content-Type': 'text/html'});
+                res.end(data);
+            }
+        });
+    }
 });
 
 require('dns').lookup(require('os').hostname(), (err, add) => {
@@ -93,4 +104,4 @@ require('dns').lookup(require('os').hostname(), (err, add) => {
     address = add;
     server.listen(PORT, address);
     process.stdout.write(`Server is listening on ip ${address}, port ${PORT}.\n`);
-});*/
+});
