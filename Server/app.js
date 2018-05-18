@@ -1,7 +1,6 @@
 const appDiv = document.getElementsByClassName('app')[0];
-
 let array = null;
-const keys = ['Name', 'Age', 'Nationality', 'Overall', 'Club', 'Value', 'Wage', 'Special'];
+const keys = ['ID', 'Name', 'Age', 'Nationality', 'Overall', 'Club', 'Value', 'Wage'];
 $.getJSON('data.json', function (json) {
     array = json;
 
@@ -20,7 +19,7 @@ $.getJSON('data.json', function (json) {
         header.appendChild(leftTopEmpty);
         for (let i = 0; i < cols; i++) {
             const th = document.createElement('th');
-            const text = document.createTextNode('Text');
+            const text = document.createTextNode(keys[i]);
             th.appendChild(text);
             header.appendChild(th);
         }
@@ -33,7 +32,10 @@ $.getJSON('data.json', function (json) {
             tr.appendChild(autoAI);
             for (let j = 0; j < cols; j++) {
                 const td = document.createElement('td');
-                const text = document.createTextNode('Text');
+                let value = array[i][keys[j]];
+                value = value.replace(/[^\x00-\x7F]/g, '');
+                value = value.replace(/\?/g, '');
+                const text = document.createTextNode(value);
                 td.appendChild(text);
                 tr.appendChild(td);
             }

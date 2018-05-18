@@ -12,6 +12,13 @@ const http      = require('http');
 const path      = require('path');
 const MongoClient = require('mongodb').MongoClient;
 
+function stripCRFromKeys(obj) {
+    const newObj = {};
+    for (const key in obj) {
+        newObj[key.replace(/\r/g, '')] = obj[key];
+    }
+    return newObj;
+}
 
 function getDataWithFilter(filter) {
     return new Promise((resolve, reject) => {
@@ -26,7 +33,7 @@ function getDataWithFilter(filter) {
                     throw err;
                 }
                 let newArray = _.filter(docs, player => {
-                    let flag = false;
+                    let flag = true;
                     _.each(filter, (value, key) => {
                         if (_.isNumber(value)) {
                             value = _.toNumber(value);
@@ -38,7 +45,7 @@ function getDataWithFilter(filter) {
                     return flag;
                 });
                 _.each(newArray, (value, key) => {
-                    newArray[key] = _.omit(newArray[key], ['_id', 'Unnamed: 0']);
+                    newArray[key] = _.omit(newArray[key], ['_id', 'Unnamed: 0', 'Special\r']); // don't use any of them
                 });
                 client.close();
                 resolve(newArray);
@@ -46,6 +53,7 @@ function getDataWithFilter(filter) {
         });
     });
 }
+
 
 let PORT    = 3300;
 let address = '127.0.0.1';
@@ -70,17 +78,17 @@ const server = http.createServer((req, res) => {
     if (fileName === '/' || fileName === '/index.html') {
         fileName = 'index.html';
     }
-    const promise = getDataWithFilter({Age: 26});
+    const promise = getDataWithFilter({});
     if (_.includes(fileName, 'data.json')) {
         promise.then(result => {
             fs.writeFileSync(path.join(__dirname, 'data.json'), JSON.stringify(result), 'utf-8');
-            fs.readFile(path.join(__dirname, fileName), (err, data) => {
+            fs.readFile(path.join(__dirname, 'data.json'), (err, data) => {
                 if (err) {
                     res.writeHead(400, {'Content-type':'application/json'});
                     res.end('A trouble occurred with the file.');
                 } else {
                     res.writeHead(200, {'Content-Type': 'application/json'});
-                    res.end(JSON.stringify(data));
+                    res.end(data);
                 }
             });
         });
