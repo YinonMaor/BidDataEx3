@@ -6,7 +6,7 @@ $.getJSON('data.json', function (json) {
 
     console.log(array);
 
-    createTableIntoDiv(appDiv, array.length, _.size(array[0]), array);
+    createTableIntoDiv(appDiv, array.length, keys.length, array);
 
     function createTableIntoDiv(div, rows, cols, array) {
         if (rows === 0 || cols === 0) {
@@ -53,5 +53,8 @@ function isNumberKey(evt){
 }
 
 document.getElementById('submit').addEventListener('click', () => {
-    console.log('clicked');
+    const age =document.getElementById('form').innerText;
+    if (age !== '') {
+        document.getElementById('form').action = `/index.html?age=${age}`;
+    }
 });

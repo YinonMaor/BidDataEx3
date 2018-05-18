@@ -94,25 +94,27 @@
     <p>
         <span style="font-size: 20px;">Filter By:</span>
     </p>
-    <table id="tableFilter">
-        <tr>
-            <th>Tag</th>
-            <th>Value</th>
-        </tr>
-        <tr>
-            <td>
-                Age:
-            </td>
-            <td>
-                <input type="text" id="fname" name="age" placeholder="Age.." onkeypress="return isNumberKey(event)" />
-            </td>
-        </tr>
-        <tr>
-            <td colspan="2">
-                <input id="submit" type="submit" value="Submit" />
-            </td>
-        </tr>
-    </table>
+    <form id="form">
+        <table id="tableFilter">
+            <tr>
+                <th>Tag</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>
+                    Age:
+                </td>
+                <td>
+                    <input type="text" id="age" name="age" placeholder="Age.." onkeypress="return isNumberKey(event)" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input id="submit" type="submit" value="Submit" />
+                </td>
+            </tr>
+        </table>
+    </form>
 </div>
 <div class="app"></div>
 <script src="app.js"></script>
