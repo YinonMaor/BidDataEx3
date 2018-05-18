@@ -1,7 +1,14 @@
 const appDiv = document.getElementsByClassName('app')[0];
 let array = null;
 const keys = ['ID', 'Name', 'Age', 'Nationality', 'Overall', 'Club', 'Value', 'Wage'];
-$.getJSON('data.json', function (json) {
+let url = window.location.href;
+if (url.includes('?')) {
+    const index = url.indexOf('?');
+    url = url.substring(index);
+} else {
+    url = '';
+}
+$.getJSON('data.json' + url, json => {
     array = json;
 
     console.log(array);
@@ -53,7 +60,7 @@ function isNumberKey(evt){
 }
 
 document.getElementById('submit').addEventListener('click', () => {
-    const age =document.getElementById('form').innerText;
+    const age = document.getElementById('form').innerText;
     if (age !== '') {
         document.getElementById('form').action = `/index.html?age=${age}`;
     }

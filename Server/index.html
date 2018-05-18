@@ -53,6 +53,10 @@
             cursor: pointer;
         }
 
+        #submitHomePage {
+            width: 100px;
+        }
+
         input[type=submit]:active {
             opacity: 0.7;
         }
@@ -87,7 +91,10 @@
 <body>
 <div style="width: 100%;">
     <p style="text-align: center;">
-        <span style="font-size: 24px;">Football</span>
+        <span style="font-size: 24px;">Football Database</span>
+    </p>
+    <p style="text-align: right">
+        <input id="submitHomePage" type="submit" value="HomePage" onclick="window.location.href='/'" />
     </p>
 </div>
 <div class="filter">
