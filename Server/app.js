@@ -5,6 +5,21 @@ let url = window.location.href;
 if (url.includes('?')) {
     const index = url.indexOf('?');
     url = url.substring(index);
+
+    const params = url.substring(url.indexOf('?') + 1).split('&');
+    params.forEach(value => {
+        if (value.includes('age') || value.includes('Age')) {
+            const age = value.substring(value.indexOf('=') + 1);
+            if (age !== '') {
+                document.getElementById('age').value = age;
+            }
+        } else if (value.includes('nationality') || value.includes('Nationality')) {
+            const nationality = value.substring(value.indexOf('=') + 1);
+            if (nationality !== '') {
+                document.getElementById('nationality').value = nationality;
+            }
+        }
+    });
 } else {
     url = '';
 }
