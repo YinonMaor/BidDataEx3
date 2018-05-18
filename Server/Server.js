@@ -27,11 +27,13 @@ function getDataWithFilter(filter) {
                 const newArray = _.filter(docs, player => {
                     let flag = true;
                     _.each(filter, (value, key) => {
-                        if (_.isNumber(value)) {
-                            value = _.toNumber(value);
-                            flag = _.isEqual(_.toNumber(player[key]), value);
-                        } else {
-                            flag = _.isEqual(player[key], value);
+                        if (flag) {
+                            if (_.isNumber(value)) {
+                                value = _.toNumber(value);
+                                flag = _.isEqual(_.toNumber(player[key]), value);
+                            } else {
+                                flag = _.isEqual(player[key], value);
+                            }
                         }
                     });
                     return flag;
@@ -72,12 +74,19 @@ const server = http.createServer((req, res) => {
 
         const filter = _.reduce(params, (acc, value) => {
             if (_.includes(value, 'age') || _.includes(value, 'Age')) {
-                acc.Age = _.toNumber(value.substring(value.indexOf('=') + 1));
+                const age = value.substring(value.indexOf('=') + 1);
+                if (age !== '') {
+                    acc.Age = _.toNumber(age);
+                }
             } else if (_.includes(value, 'nationality') || _.includes(value, 'Nationality')) {
-                acc.Nationality = value.substring(value.indexOf('=') + 1);
+                const nationality = value.substring(value.indexOf('=') + 1);
+                if (nationality !== '') {
+                    acc.Nationality = nationality;
+                }
             }
             return acc;
         }, {});
+        console.log(filter);
         const promise = getDataWithFilter(filter);
         promise.then(result => {
             fs.writeFileSync(path.join(__dirname, 'data.json'), JSON.stringify(result), 'utf-8');

@@ -59,9 +59,13 @@ function isNumberKey(evt){
     return !(charCode > 31 && (charCode < 48 || charCode > 57));
 }
 
-document.getElementById('submit').addEventListener('click', () => {
-    const age = document.getElementById('form').innerText;
-    if (age !== '') {
-        document.getElementById('form').action = `/index.html?age=${age}`;
-    }
-});
+// document.getElementById('submit').addEventListener('click', () => {
+//     const age = document.getElementById('age').innerText;
+//     const nationality = document.getElementById('nationality').innerText;
+//     if (age !== '') {
+//         document.getElementById('form').action = `/?age=${age}`;
+//     } else if (nationality !== '') {
+//         console.log('in nationality')
+//         document.getElementById('form').action = `/?nationality=${nationality}`;
+//     }
+// });
