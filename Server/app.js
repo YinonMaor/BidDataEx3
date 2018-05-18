@@ -6,27 +6,27 @@ function createTableIntoDiv(div, rows, cols) {
     if (rows === 0 || cols === 0) {
         return '';
     }
-    let table = document.createElement('table');
-    let header = document.createElement('tr');
-    let leftTopEmpty = document.createElement('th');
+    const table = document.createElement('table');
+    const header = document.createElement('tr');
+    const leftTopEmpty = document.createElement('th');
     leftTopEmpty.appendChild(document.createTextNode(''));
     header.appendChild(leftTopEmpty);
     for (let i = 0; i < cols; i++) {
-        let th = document.createElement('th');
-        let text = document.createTextNode('Text');
+        const th = document.createElement('th');
+        const text = document.createTextNode('Text');
         th.appendChild(text);
         header.appendChild(th);
     }
     table.appendChild(header);
     for (let i = 0; i < rows; i++){
-        let tr = document.createElement('tr');
-        let autoAI = document.createElement('td');
-        let k = i + 1;
+        const tr = document.createElement('tr');
+        const autoAI = document.createElement('td');
+        const k = i + 1;
         autoAI.appendChild(document.createTextNode(`${k}`));
         tr.appendChild(autoAI);
         for (let j = 0; j < cols; j++) {
-            let td = document.createElement('td');
-            let text = document.createTextNode('Text');
+            const td = document.createElement('td');
+            const text = document.createTextNode('Text');
             td.appendChild(text);
             tr.appendChild(td);
         }
@@ -36,10 +36,10 @@ function createTableIntoDiv(div, rows, cols) {
 }
 
 function isNumberKey(evt){
-    let charCode = (evt.which) ? evt.which : event.keyCode;
+    const charCode = evt.which ? evt.which : event.keyCode;
     return !(charCode > 31 && (charCode < 48 || charCode > 57));
 }
 
-document.getElementById("submit").addEventListener("click", () => {
-    console.log('clicked')
+document.getElementById('submit').addEventListener('click', () => {
+    console.log('clicked');
 });

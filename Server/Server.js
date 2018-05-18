@@ -10,11 +10,47 @@ const _         = require('lodash');
 const fs        = require('fs');
 const http      = require('http');
 const path      = require('path');
+const MongoClient = require('mongodb').MongoClient;
 
 
-function isValidPort(port) {
-    return !_.includes(port, '.') && !isNaN(port) && port >= 1024 && port <= 65535;
+function getDataWithFilter(filter) {
+    return new Promise((resolve, reject) => {
+        const uri = 'mongodb+srv://yinonmail:YinonMaor123!@yinonmaor-pgqgs.mongodb.net/test?retryWrites=true';
+        MongoClient.connect(uri, async (err, client) => {
+            if (err) {
+                throw err;
+            }
+            const collection = await client.db('players').collection('details');
+            collection.find({}).toArray((err, docs) => {
+                if (err) {
+                    throw err;
+                }
+                const newArray = _.filter(docs, player => {
+                    let flag = false;
+                    _.each(filter, (value, key) => {
+                        if (_.isNumber(value)) {
+                            value = _.toNumber(value);
+                            flag = _.isEqual(_.toNumber(player[key]), value);
+                        } else {
+                            flag = _.isEqual(player[key], value);
+                        }
+                    });
+                    return flag;
+                });
+                client.close();
+                resolve(newArray);
+            });
+        });
+    });
 }
+
+const promise = getDataWithFilter({Age: 26});
+promise.then(result => {
+    console.log(result);
+});
+
+/*
+
 
 let PORT    = 3300;
 let address = '127.0.0.1';
@@ -28,15 +64,10 @@ if (_.includes(process.argv, '--help')) {
 
 process.argv.forEach((val, index, array) => {
     if (val === '--port' && array[index + 1]) {
-        if (isValidPort(array[index + 1])) {
-            PORT = parseInt(array[index + 1])
-        }
+        PORT = parseInt(array[index + 1]);
     }
 });
 
-/**
- * Creating the server and defining the specific service for various requests.
- */
 const server = http.createServer((req, res) => {
     console.log(`${req.method} request for ${req.url}`);
     console.log(`From: ${req.connection.remoteAddress}`);
@@ -55,9 +86,6 @@ const server = http.createServer((req, res) => {
     });
 });
 
-/**
- * Defining the server's listener
- */
 require('dns').lookup(require('os').hostname(), (err, add) => {
     if (err) {
         throw err;
@@ -65,4 +93,4 @@ require('dns').lookup(require('os').hostname(), (err, add) => {
     address = add;
     server.listen(PORT, address);
     process.stdout.write(`Server is listening on ip ${address}, port ${PORT}.\n`);
-});
+});*/
