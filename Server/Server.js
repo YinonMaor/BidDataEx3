@@ -13,7 +13,7 @@ const path      = require('path');
 const MongoClient = require('mongodb').MongoClient;
 
 function getDataWithFilter(filter) {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
         const uri = 'mongodb+srv://yinonmail:YinonMaor123!@yinonmaor-pgqgs.mongodb.net/test?retryWrites=true';
         MongoClient.connect(uri, async (err, client) => {
             if (err) {
