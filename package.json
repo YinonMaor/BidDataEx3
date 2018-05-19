@@ -1,11 +1,12 @@
 {
   "name": "bigdataex3",
   "version": "1.0.0",
-  "description": "",
+  "description": "Big data excersise 3.",
   "main": "index.js",
   "scripts": {
     "lint": "./node_modules/.bin/eslint Server/",
-    "fix": "./node_modules/.bin/eslint Server/ --fix"
+    "fix": "./node_modules/.bin/eslint Server/ --fix",
+    "start": "node Server/Server --port 3300"
   },
   "repository": {
     "type": "git",
