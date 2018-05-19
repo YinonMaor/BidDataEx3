@@ -29,8 +29,6 @@ if (url.includes('?')) {
 $.getJSON('data.json' + url, json => {
     array = json;
 
-    console.log(array);
-
     createTableIntoDiv(appDiv, array.length, keys.length, array);
 
     function createTableIntoDiv(div, rows, cols, array) {

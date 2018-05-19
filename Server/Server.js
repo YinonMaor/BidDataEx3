@@ -86,7 +86,6 @@ const server = http.createServer((req, res) => {
             }
             return acc;
         }, {});
-        console.log(filter);
         const promise = getDataWithFilter(filter);
         promise.then(result => {
             fs.writeFileSync(path.join(__dirname, 'data.json'), JSON.stringify(result), 'utf-8');
