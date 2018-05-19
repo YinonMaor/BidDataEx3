@@ -1,3 +1,6 @@
+if (document.getElementsByClassName('loader')[0].style.display === 'none') {
+    document.getElementsByClassName('loader')[0].style.display = 'block';
+}
 const appDiv = document.getElementsByClassName('app')[0];
 let array = null;
 const keys = ['ID', 'Name', 'Age', 'Nationality', 'Overall', 'Club', 'Value', 'Wage'];
@@ -64,6 +67,8 @@ $.getJSON('data.json' + url, json => {
             table.appendChild(tr);
         }
         div.appendChild(table);
+        div.style.display = 'block';
+        document.getElementsByClassName('loader')[0].style.display = 'none';
     }
 });
 
@@ -74,13 +79,12 @@ function isNumberKey(evt){
     return !(charCode > 31 && (charCode < 48 || charCode > 57));
 }
 
-// document.getElementById('submit').addEventListener('click', () => {
-//     const age = document.getElementById('age').innerText;
-//     const nationality = document.getElementById('nationality').innerText;
-//     if (age !== '') {
-//         document.getElementById('form').action = `/?age=${age}`;
-//     } else if (nationality !== '') {
-//         console.log('in nationality')
-//         document.getElementById('form').action = `/?nationality=${nationality}`;
-//     }
-// });
+document.getElementById('submit').addEventListener('click', () => {
+    document.getElementsByClassName('loader')[0].style.display = 'block';
+    const appDiv = document.getElementsByClassName('app')[0].style.display = 'none';
+});
+
+document.getElementById('submitHomePage').addEventListener('click', () => {
+    document.getElementsByClassName('loader')[0].style.display = 'block';
+    const appDiv = document.getElementsByClassName('app')[0].style.display = 'none';
+});

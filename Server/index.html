@@ -4,6 +4,22 @@
     <meta charset="UTF-8">
     <title>BigData - Yinon Maor</title>
     <style>
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid #3498db;
+            width: 90px;
+            height: 90px;
+            -webkit-animation: spin 2s linear infinite; /* Safari */
+            animation: spin 2s linear infinite;
+            display: none;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
         body {
             background-color: #f2f2f2;
         }
@@ -131,7 +147,8 @@
         </table>
     </form>
 </div>
-<div class="app"></div>
+<div class="loader"></div>
+<div id="appDiv" class="app"></div>
 <script src="app.js"></script>
 </body>
 </html>
