@@ -28,7 +28,7 @@ if (url.includes('?')) {
 }
 $.getJSON('data.json' + url, json => {
     array = json;
-
+    console.log(array);
     createTableIntoDiv(appDiv, array.length, keys.length, array);
 
     function createTableIntoDiv(div, rows, cols, array) {
@@ -47,6 +47,7 @@ $.getJSON('data.json' + url, json => {
             header.appendChild(th);
         }
         table.appendChild(header);
+        let flag = true;
         for (let i = 0; i < rows; i++){
             const tr = document.createElement('tr');
             const autoAI = document.createElement('td');
@@ -56,13 +57,21 @@ $.getJSON('data.json' + url, json => {
             for (let j = 0; j < cols; j++) {
                 const td = document.createElement('td');
                 let value = array[i][keys[j]];
-                value = value.replace(/[^\x00-\x7F]/g, '');
-                value = value.replace(/\?/g, '');
-                const text = document.createTextNode(value);
-                td.appendChild(text);
-                tr.appendChild(td);
+                if (value) {
+                    value = value.replace(/[^\x00-\x7F]/g, '');
+                    value = value.replace(/\?/g, '');
+                    const text = document.createTextNode(value);
+                    td.appendChild(text);
+                    tr.appendChild(td);
+                } else {
+                    flag = false;
+                }
             }
-            table.appendChild(tr);
+            if (flag) {
+                table.appendChild(tr);
+            } else {
+                flag = true;
+            }
         }
         div.appendChild(table);
         div.style.display = 'block';
