@@ -19,7 +19,7 @@ function getDataWithFilter(filter) {
             if (err) {
                 throw err;
             }
-            const collection = await client.db('players').collection('details');
+            const collection = await client.db('players').collection('detail');
             collection.find({}).toArray((err, docs) => {
                 if (err) {
                     throw err;
