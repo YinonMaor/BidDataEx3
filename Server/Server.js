@@ -12,7 +12,9 @@ const http      = require('http');
 const path      = require('path');
 const MongoClient = require('mongodb').MongoClient;
 
-function getDataWithFilter(filter) {
+let data = null;
+
+function getDataWithFilter() {
     return new Promise(resolve => {
         const uri = 'mongodb+srv://maorshabtay:YinonMaor123!@playersmdb-f0pam.mongodb.net/test?retryWrites=true';
         MongoClient.connect(uri, async (err, client) => {
@@ -24,28 +26,33 @@ function getDataWithFilter(filter) {
                 if (err) {
                     throw err;
                 }
-                const newArray = _.filter(docs, player => {
-                    let flag = true;
-                    _.each(filter, (value, key) => {
-                        if (flag) {
-                            if (_.isNumber(value)) {
-                                value = _.toNumber(value);
-                                flag = _.isEqual(_.toNumber(player[key]), value);
-                            } else {
-                                flag = _.isEqual(player[key], value);
-                            }
-                        }
-                    });
-                    return flag;
-                });
-                _.each(newArray, (value, key) => {
-                    newArray[key] = _.omit(newArray[key], ['_id', 'Unnamed: 0', 'Special\r']); // don't use any of them
-                });
+                data = docs;
                 client.close();
-                resolve(newArray);
+                resolve();
             });
         });
     });
+}
+
+function filterDataBy(filter, data) {
+    const newArray = _.filter(data, player => {
+        let flag = true;
+        _.each(filter, (value, key) => {
+            if (flag) {
+                if (_.isNumber(value)) {
+                    value = _.toNumber(value);
+                    flag = _.isEqual(_.toNumber(player[key]), value);
+                } else {
+                    flag = _.isEqual(player[key], value);
+                }
+            }
+        });
+        return flag;
+    });
+    _.each(newArray, (value, key) => {
+        newArray[key] = _.omit(newArray[key], ['_id', 'Unnamed: 0', 'Special\r']); // don't use any of them
+    });
+    return newArray;
 }
 
 
@@ -86,18 +93,15 @@ const server = http.createServer((req, res) => {
             }
             return acc;
         }, {});
-        const promise = getDataWithFilter(filter);
-        promise.then(result => {
-            fs.writeFileSync(path.join(__dirname, 'data.json'), JSON.stringify(result), 'utf-8');
-            fs.readFile(path.join(__dirname, 'data.json'), (err, data) => {
-                if (err) {
-                    res.writeHead(400, {'Content-type':'application/json'});
-                    res.end('A trouble occurred with the file.');
-                } else {
-                    res.writeHead(200, {'Content-Type': 'application/json'});
-                    res.end(data);
-                }
-            });
+        fs.writeFileSync(path.join(__dirname, 'data.json'), JSON.stringify(filterDataBy(filter, data)), 'utf-8');
+        fs.readFile(path.join(__dirname, 'data.json'), (err, data) => {
+            if (err) {
+                res.writeHead(400, {'Content-type':'application/json'});
+                res.end('A trouble occurred with the file.');
+            } else {
+                res.writeHead(200, {'Content-Type': 'application/json'});
+                res.end(data);
+            }
         });
     } else if (_.includes(fileName, 'app.js')) {
         fileName = 'app.js';
@@ -126,9 +130,13 @@ const server = http.createServer((req, res) => {
 
 require('dns').lookup(require('os').hostname(), (err, add) => {
     if (err) {
-        throw err;
+        console.log(err);
     }
+    const promise = getDataWithFilter();
     address = add;
-    server.listen(PORT, address);
-    process.stdout.write(`Server is listening on ip ${address}, port ${PORT}.\n`);
+    process.stdout.write(`Loading data ...`);
+    promise.then(() => {
+        server.listen(PORT, address);
+        process.stdout.write(`Server is listening on ip ${address}, port ${PORT}.\n`);
+    });
 });
